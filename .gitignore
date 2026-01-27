@@ -1,5 +1,13 @@
+# Mac
+.DS_Store
+
+# Python
 .venv/
 __pycache__/
 *.pyc
+
+# Ambiente
 .env
-.DS_Store
+
+# Arquivos temporários do projeto
+tmp/
