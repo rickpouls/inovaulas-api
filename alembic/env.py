@@ -5,6 +5,7 @@ from alembic import context
 
 from app.core.config import settings
 from app.db.base import Base
+target_metadata = Base.metadata
 
 # IMPORTANTE: importar models para registrar no Base.metadata
 import app.models  # noqa
