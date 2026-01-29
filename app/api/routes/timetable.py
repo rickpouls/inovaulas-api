@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from typing import Any, Dict, List
+
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from sqlalchemy import select, func
@@ -46,7 +50,7 @@ def get_timetable(
 
     q = select(TimetableEntry).where(TimetableEntry.timetable_version_id == tv.id)
 
-    # filtros combináveis (busca "contém", case-insensitive)
+    # filtros combináveis
     if group:
         q = q.where(TimetableEntry.group_code.ilike(f"%{group}%"))
 
@@ -66,6 +70,7 @@ def get_timetable(
     return {
         "timetable_code": tv.code,
         "filters": {"group": group, "teacher": teacher, "room": room, "weekday": weekday},
+        "count": len(entries),
         "entries": [
             {
                 "weekday": e.weekday,
@@ -90,7 +95,11 @@ def get_filters(timetable_code: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="timetable not found")
 
     base = (
-        select(TimetableEntry)
+        select(
+            TimetableEntry.group_code,
+            TimetableEntry.teacher_name,
+            TimetableEntry.room_name,
+        )
         .where(TimetableEntry.timetable_version_id == tv.id)
         .subquery()
     )
