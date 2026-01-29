@@ -220,10 +220,8 @@ def main() -> None:
     if not payload_rows:
         die("Nenhuma linha válida após conversão (weekday/slot/group_code). Verifique CSV.")
 
-    token = os.getenv("ACCESS_TOKEN")
-    if not token:
-        token = api_login_and_get_token(api_base_url, login_username)
-        print("OK login automático. Token recebido.")
+    token = api_login_and_get_token(api_base_url, login_username)
+    print("OK login automático. Token recebido.")
 
     status, body = post_timetable_import(api_base_url, token, payload_rows)
 
